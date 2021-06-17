@@ -70,7 +70,6 @@ class PetSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     pets = PetSerializer(many=True)
 
-
     class Meta:
         model = Account
         fields = ['user', 'first_name', 'last_name', 'is_active', 'pets']

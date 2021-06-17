@@ -2,4 +2,4 @@
 
 .env
 
-petpots/setting_keys.py
+petpots/settings/setting_keys.py
