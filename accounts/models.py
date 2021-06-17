@@ -26,7 +26,7 @@ class Account(models.Model):
 
 class Pet(models.Model):
     """ A pet of a user. """
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='pets')
+    owner = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='pets')
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.TextField()

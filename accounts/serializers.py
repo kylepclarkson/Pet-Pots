@@ -37,7 +37,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    """ Attempt login """
+    """ Serialize login attempt """
     username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'})
 
@@ -59,7 +59,7 @@ class PetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pet
-        fields = ['name', 'breed', 'description', 'avatar_thumbnail']
+        fields = ['name', 'breed', 'description', 'avatar_thumbnail', 'owner']
 
     def get_avatar_thumbnail(self, pet):
         # Get url for avatar thumbnail.
@@ -69,8 +69,15 @@ class PetSerializer(serializers.ModelSerializer):
 
 class AccountSerializer(serializers.ModelSerializer):
     pets = PetSerializer(many=True)
+    avatar_thumbnail = serializers.SerializerMethodField()
 
     class Meta:
         model = Account
-        fields = ['user', 'first_name', 'last_name', 'is_active', 'pets']
+        fields = ['user', 'first_name', 'last_name', 'is_active', 'pets', 'avatar_thumbnail']
+
+    def get_avatar_thumbnail(self, user):
+        # Get url for avatar thumbnail.
+        request = self.context.get('request')
+        avatar_url = user.avatar_thumbnail.url
+        return request.build_absolute_uri(avatar_url)
 
