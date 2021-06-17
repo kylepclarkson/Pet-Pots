@@ -20,10 +20,13 @@ class Account(models.Model):
         options={'quality': 70}
     )    
     
+    def __str__(self) -> str:
+        return f'{self.first_name} {self.last_name}'
+
 
 class Pet(models.Model):
     """ A pet of a user. """
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='pets')
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.TextField()
@@ -34,3 +37,8 @@ class Pet(models.Model):
         format='PNG',
         options={'quality': 70}
     )
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
