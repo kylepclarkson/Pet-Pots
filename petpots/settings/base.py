@@ -131,5 +131,5 @@ CORS_ORIGIN_WHITELIST = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
-    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+    'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S.%fZ",
 }

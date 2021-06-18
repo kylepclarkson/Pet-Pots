@@ -59,7 +59,7 @@ class PetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pet
-        fields = ['name', 'breed', 'description', 'avatar_thumbnail', 'owner']
+        fields = ['id', 'name', 'breed', 'description', 'avatar_thumbnail', 'owner']
 
     def get_avatar_thumbnail(self, pet):
         # Get url for avatar thumbnail.
@@ -73,7 +73,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['user', 'first_name', 'last_name', 'is_active', 'pets', 'avatar_thumbnail']
+        fields = ['id', 'user', 'first_name', 'last_name', 'is_active', 'pets', 'avatar_thumbnail']
 
     def get_avatar_thumbnail(self, user):
         # Get url for avatar thumbnail.

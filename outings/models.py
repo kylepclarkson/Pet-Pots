@@ -12,4 +12,4 @@ class Outing(models.Model):
     pets = models.ManyToManyField(Pet, blank=True)
 
     def __str__(self) -> str:
-        return f'Outing by {self.user_account} [{self.start_time} - {self.end_time}]'
+        return f'{self.user_account}: [{self.start_time} - {self.end_time}]'
