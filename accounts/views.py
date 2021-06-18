@@ -1,22 +1,10 @@
-from accounts.serializers import AccountSerializer
+
 from rest_framework import viewsets, permissions, generics, views
 from rest_framework.response import Response
 from knox.models import AuthToken
 
 from . import serializers
 from .models import Account
-
-
-class IndexAPI(views.APIView):
-    """ Authentication API endpoints """
-    permissions = [permissions.AllowAny]
-
-    def get(self, request, format=None):
-        return Response({
-            'key': 'value'
-            # TODO Add authentication endpoints.
-        })
-
 
 class RegisterUserAPI(generics.GenericAPIView):
     """ Register new user """

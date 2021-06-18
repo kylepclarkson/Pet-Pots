@@ -1,4 +1,4 @@
-from django.urls import path, include
+
 from rest_framework import routers
 
 from . import views
@@ -6,6 +6,7 @@ from . import views
 urlpatterns = []
 
 router = routers.DefaultRouter()
-router.register('', views.OutingViewSet, 'outings')
+router.register('outings', views.OutingViewSet, 'outings')
+router.register('pets', views.PetViewSet, 'pets')
 
 urlpatterns += router.urls

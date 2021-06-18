@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from .models import Account, Pet
+from .models import Account
 
 class RegisterSerializer(serializers.ModelSerializer):
     """ Register a new user """
@@ -54,26 +54,13 @@ class LoginSerializer(serializers.Serializer):
 
         return user
 
-class PetSerializer(serializers.ModelSerializer):
-    avatar_thumbnail = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Pet
-        fields = ['id', 'name', 'breed', 'description', 'avatar_thumbnail', 'owner']
-
-    def get_avatar_thumbnail(self, pet):
-        # Get url for avatar thumbnail.
-        request = self.context.get('request')
-        avatar_url = pet.avatar_thumbnail.url
-        return request.build_absolute_uri(avatar_url)
-
 class AccountSerializer(serializers.ModelSerializer):
-    pets = PetSerializer(many=True)
+    # pets = PetSerializer(many=True)
     avatar_thumbnail = serializers.SerializerMethodField()
 
     class Meta:
         model = Account
-        fields = ['id', 'user', 'first_name', 'last_name', 'is_active', 'pets', 'avatar_thumbnail']
+        fields = '__all__'
 
     def get_avatar_thumbnail(self, user):
         # Get url for avatar thumbnail.

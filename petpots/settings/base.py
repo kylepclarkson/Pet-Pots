@@ -33,8 +33,8 @@ INSTALLED_APPS = [
     'imagekit',
 
     'accounts',
+    'core',
     'frontend',
-    'outings',
 ]
 
 MIDDLEWARE = [
