@@ -55,7 +55,6 @@ class LoginSerializer(serializers.Serializer):
         return user
 
 class AccountSerializer(serializers.ModelSerializer):
-    # pets = PetSerializer(many=True)
     avatar_thumbnail = serializers.SerializerMethodField()
 
     class Meta:
