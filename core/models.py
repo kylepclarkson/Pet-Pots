@@ -33,7 +33,7 @@ class Appointment(models.Model):
 
     start_time = models.DateTimeField()
     # end_time = models.DateTimeField()
-    created = models.DateTimeField(auto_created=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f'{self.walker} walking {self.owner}\'s pet {self.pet}'

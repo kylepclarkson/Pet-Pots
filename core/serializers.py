@@ -7,7 +7,7 @@ from accounts.serializers import AccountSerializer
 
 class PetReadSerializer(serializers.ModelSerializer):
     """ Used when accessing existing instance. """
-    
+    id = serializers.IntegerField()
     class Meta:
         model = Pet
         fields = ['id', 'name', 'breed', 'bio']
@@ -24,6 +24,7 @@ class AppointmentReadSerializer(serializers.ModelSerializer):
     """ Used when accessing existing instance. """
     owner = AccountSerializer()
     walker = AccountSerializer()
+    pet = PetReadSerializer()
 
     class Meta:
         model = Appointment
@@ -32,8 +33,14 @@ class AppointmentReadSerializer(serializers.ModelSerializer):
 
 class AppointmentWriteSerializer(serializers.ModelSerializer):
     """ Use when creating new instace. """
+    pet = PetReadSerializer()
 
     class Meta:
         model = Appointment
-        fields = ['pet', 'end_time']
+        fields = ['pet', 'start_time']
 
+    def create(self, appointment_vd, pet_vd, owner):
+        # Note pet instance must exist.
+        pet = Pet.objects.get(id=pet_vd.get('id'))
+        appointment = Appointment.objects.create(owner=owner, pet=pet, start_time=appointment_vd.get('start_time'))
+        return appointment
