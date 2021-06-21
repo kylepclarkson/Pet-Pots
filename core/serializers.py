@@ -1,42 +1,39 @@
 
 from rest_framework import serializers
 
-from .models import Outing, Pet
+from .models import Pet, Appointment
 from accounts.serializers import AccountSerializer
 
 
-class PetSerializer(serializers.ModelSerializer):
-
-    avatar_thumbnail = serializers.SerializerMethodField()
-    user_account = AccountSerializer()
-
+class PetReadSerializer(serializers.ModelSerializer):
+    """ Used when accessing existing instance. """
+    
     class Meta:
         model = Pet
-        fields = '__all__'
-        depth=1
+        fields = ['id', 'name', 'breed', 'bio']
 
-    def get_avatar_thumbnail(self, pet):
-        # Get url for avatar thumbnail.
-        request = self.context.get('request')
-        print("pet here", pet)
-        avatar_url = pet.avatar_thumbnail.url
-        return request.build_absolute_uri(avatar_url)
-        
-class OutingSerializer(serializers.ModelSerializer):
 
-    # pets = PetSerializer()
+class PetWriteSerializer(serializers.ModelSerializer):
+    """ Use when creating new instace. """
     class Meta:
-        model = Outing
-        fields = '__all__'
-        # Set depth to 1 to access fields of user_account instead of its pk. 
-        depth=1
+        model = Pet
+        fields = ['name', 'breed', 'bio']
 
 
-{
-                "id": 1,
-                "name": "Molly",
-                "breed": "Yellow Lab",
-                "description": "Eats a lot.",
-                "avatar": "http://localhost:8000/media_dev/pets/pet_avatar_512_512.png",
-                "user_account": 1
-            }
+class AppointmentReadSerializer(serializers.ModelSerializer):
+    """ Used when accessing existing instance. """
+    owner = AccountSerializer()
+    walker = AccountSerializer()
+
+    class Meta:
+        model = Appointment
+        fields = ['id', 'owner', 'walker', 'pet', 'start_time', 'created']
+
+
+class AppointmentWriteSerializer(serializers.ModelSerializer):
+    """ Use when creating new instace. """
+
+    class Meta:
+        model = Appointment
+        fields = ['pet', 'end_time']
+

@@ -6,7 +6,7 @@ from . import views
 urlpatterns = []
 
 router = routers.DefaultRouter()
-# router.register('outings', views.OutingViewSet, 'outings')
-# router.register('pets', views.PetViewSet, 'pets')
+router.register('appointments', views.AppointmentViewSet, 'appointments')
+router.register('pets', views.PetViewSet, 'pets')
 
-# urlpatterns += router.urls
+urlpatterns += router.urls

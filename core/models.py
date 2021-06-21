@@ -32,5 +32,8 @@ class Appointment(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
 
     start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    # end_time = models.DateTimeField()
     created = models.DateTimeField(auto_created=True)
+
+    def __str__(self) -> str:
+        return f'{self.walker} walking {self.owner}\'s pet {self.pet}'
