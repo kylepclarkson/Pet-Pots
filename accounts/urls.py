@@ -6,8 +6,8 @@ from . import views
 
 urlpatterns = [
     path('', include('knox.urls')),
-    path('register', views.RegisterUserAPI.as_view()),
-    path('login', views.LoginUserAPI.as_view()),
+    path('register', views.RegisterUserAPI.as_view(), name='auth-register'),
+    path('login', views.LoginUserAPI.as_view(), name='auth-login'),
 ]
 
 router = routers.DefaultRouter()

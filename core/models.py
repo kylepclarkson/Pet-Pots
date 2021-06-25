@@ -28,7 +28,7 @@ class Appointment(models.Model):
     A scheduled time for a walker to take a pet for a walker.
     """
     owner = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='owner')
-    walker = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='walker', null=True)
+    walker = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='walker', null=True, blank=True)
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
 
     start_time = models.DateTimeField()

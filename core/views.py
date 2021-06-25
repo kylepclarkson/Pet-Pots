@@ -10,11 +10,11 @@ class PetViewSet(viewsets.ModelViewSet):
     """
     Pet View Set 
     """
-    permission_classes = [ 
+    permission_classes = [
         permissions.IsAuthenticated,
     ]
     serializer_class = PetWriteSerializer
-    
+
     def get_queryset(self):
         """ Filter by only the user's pets. """
         user = self.request.user
@@ -33,7 +33,7 @@ class PetViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer_class()(data=request.data.pop('pet'))
         if serializer.is_valid():
             # Add user_account instance
-            pet = serializer.save(owner=self.request.user.user_account)           
+            pet = serializer.save(owner=self.request.user.user_account)
             return Response(PetReadSerializer(pet, context={'request': request}).data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -41,8 +41,9 @@ class PetViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
+
 class AppointmentViewSet(viewsets.ModelViewSet):
-    
+
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly
     ]
@@ -58,23 +59,47 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         else:
             return AppointmentReadSerializer
 
-
     def create(self, request, *args, **kwargs):
-        appointment_serializer = self.get_serializer_class()(data=request.data.get('appointment'))
-        pet_serializer = PetReadSerializer(data=request.data.get('appointment').get('pet'))
-        
+        appointment_serializer = self.get_serializer_class()(
+            data=request.data.get('appointment'))
+        pet_serializer = PetReadSerializer(
+            data=request.data.get('appointment').get('pet'))
+
         # Validate inputs
         if appointment_serializer.is_valid():
             if pet_serializer.is_valid():
                 # Add user_account instance
                 appointment = appointment_serializer.create(
                     appointment_vd=appointment_serializer.validated_data,
-                    pet_vd=pet_serializer.validated_data, 
+                    pet_vd=pet_serializer.validated_data,
                     owner=self.request.user.user_account
-                )           
+                )
                 return Response(AppointmentReadSerializer(appointment, context={'request': request}).data, status=status.HTTP_201_CREATED)
-            else: 
-                return Response(pet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+            else:
+                return Response(pet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(appointment_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, *args, **kwargs):
+        print("update appointment called")
+        appointment_serializer = self.get_serializer_class()(data=request.data)
+        print(repr(self.get_serializer_class()))
+        user = request.data.get('owner').get('user')
+
+        # Validate inputs
+        if appointment_serializer.is_valid():
+            # Add user_account instance
+            appointment = appointment_serializer.update(
+                appointment_vd=appointment_serializer.validated_data,
+            )
+            return Response(AppointmentReadSerializer(appointment, context={'request': request}).data, status=status.HTTP_201_CREATED)
+
+        else:
+            return Response(appointment_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return super().update(request, *args, **kwargs)
+
+
+    def partial_update(self, request, *args, **kwargs):
+        print("partial update called")
+        return super().partial_update(request, *args, **kwargs)

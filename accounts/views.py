@@ -1,7 +1,8 @@
 
-from rest_framework import viewsets, permissions, generics, views
+from rest_framework import viewsets, permissions, generics, views, status
 from rest_framework.response import Response
 from knox.models import AuthToken
+from rest_framework.status import HTTP_200_OK
 
 from . import serializers
 from .models import Account
@@ -13,13 +14,16 @@ class RegisterUserAPI(generics.GenericAPIView):
     def post(self, request):
         # register new user and create (deactivate) account.
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({
-            # 'user': serializers.UserSerializer(user, context=self.get_serializer_context()).data,
-            'message': 'Account created! Please check your email for the activation link.'
-        })
         
+        if serializer.is_valid():
+            # Create user and authentication token.
+            user = serializer.save()
+            return Response({
+                'token': AuthToken.objects.create(user)[1]
+            },
+            status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class LoginUserAPI(generics.GenericAPIView):
     """ Login existing user """
@@ -36,6 +40,6 @@ class LoginUserAPI(generics.GenericAPIView):
         account = Account.objects.get(user=user)
         
         return Response({
-            'account': serializers.AccountSerializer(account, context=self.get_serializer_context()).data,
+            'account': serializers.AccountReadSerializer(account, context=self.get_serializer_context()).data,
             'token': AuthToken.objects.create(user)[1]
         })

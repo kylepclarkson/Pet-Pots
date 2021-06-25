@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 from .models import Pet, Appointment
-from accounts.serializers import AccountSerializer
+from accounts.serializers import AccountReadSerializer, AccountWriteSerializer
 
 
 class PetReadSerializer(serializers.ModelSerializer):
@@ -22,8 +22,10 @@ class PetWriteSerializer(serializers.ModelSerializer):
 
 class AppointmentReadSerializer(serializers.ModelSerializer):
     """ Used when accessing existing instance. """
-    owner = AccountSerializer()
-    walker = AccountSerializer()
+    owner = AccountReadSerializer()
+    walker = AccountReadSerializer()
+    owner = AccountReadSerializer(required=False)
+    walker = AccountReadSerializer(required=False)
     pet = PetReadSerializer()
 
     class Meta:
@@ -33,14 +35,19 @@ class AppointmentReadSerializer(serializers.ModelSerializer):
 
 class AppointmentWriteSerializer(serializers.ModelSerializer):
     """ Use when creating new instace. """
+    owner = AccountWriteSerializer()
+    walker = AccountWriteSerializer(required=False)
     pet = PetReadSerializer()
 
     class Meta:
         model = Appointment
-        fields = ['pet', 'start_time']
+        fields = ['pet', 'owner', 'walker', 'pet', 'start_time']
 
     def create(self, appointment_vd, pet_vd, owner):
-        # Note pet instance must exist.
         pet = Pet.objects.get(id=pet_vd.get('id'))
         appointment = Appointment.objects.create(owner=owner, pet=pet, start_time=appointment_vd.get('start_time'))
         return appointment
+
+    def update(self, instance, validated_data):
+        print('validated data', validated_data)
+        return super().update(instance, validated_data)
