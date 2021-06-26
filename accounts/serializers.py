@@ -49,18 +49,15 @@ class LoginSerializer(serializers.Serializer):
             # User does not exist or invalid.
             raise serializers.ValidationError("Invalid login credentials")
         user_account = Account.objects.get(user=user)
-        if not user_account.is_active:
-            # User has not yet activated their account.
-            raise serializers.ValidationError("Account is not yet activated. Please check your email.")
 
         return user
 
-class AccountReadSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer):
     avatar_thumbnail = serializers.SerializerMethodField()
-
+    
     class Meta:
         model = Account
-        fields = ['id', 'user', 'first_name', 'last_name', 'is_active', 'avatar_thumbnail']
+        fields = ['id', 'user', 'first_name', 'last_name', 'avatar_thumbnail']
 
     def get_avatar_thumbnail(self, user):
         # Get url for avatar thumbnail.
@@ -69,12 +66,9 @@ class AccountReadSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(avatar_url)
 
 
-class AccountWriteSerializer(serializers.ModelSerializer):
-
-    city = serializers.CharField(allow_blank=True)
-    address = serializers.CharField(allow_blank=True)
+class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['user', 'first_name', 'last_name', 'is_active', 'address', 'city', 'avatar']
+        fields = ['id', 'user', 'first_name', 'last_name', 'address', 'city', 'avatar']
 

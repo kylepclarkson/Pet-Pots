@@ -7,10 +7,9 @@ from imagekit.processors import ResizeToFill
 
 class Account(models.Model):
     """ An account of a user """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_account')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=False)
     
     address = models.CharField(max_length=200, blank=True)
     city = models.CharField(max_length=100, blank=True)

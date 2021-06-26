@@ -24,7 +24,8 @@ class Pets(APITestCase):
         self.assertEqual(len(Account.objects.all()), 1)
 
     def test_login_user(self):
-        """ Test Login of user. """
+        """ Test logging in an existing user."""
+        # first create the user.
         _create_user(self)
 
         url = reverse('auth-login')
@@ -34,21 +35,21 @@ class Pets(APITestCase):
         }
 
         response = self.client.post(url, data, format='json')
-        print([x for x in AuthToken.objects.all()])
+        account = response.data.get('account')
         # 2 tokens - upon registration and login. 
         self.assertEqual(len(AuthToken.objects.all()), 2)
-
+        self.assertEqual(account.get('first_name'), 'test-first-name')
+        self.assertEqual(account.get('last_name'), 'test-last-name')
 
 
 def _create_user(ref):
-    """ Register a user. """
-
+    """ Create a new user. """
     url = reverse('auth-register')
     data = {
         'username': 'testuser',
         'password': 'kajsdkfjaksdncadsjj11342424',
-        'first_name': 'Test user first name',
-        'last_name': 'Test user last name',
+        'first_name': 'test-first-name',
+        'last_name': 'test-last-name',
     }
 
     response = ref.client.post(url, data, format='json')
